@@ -33,12 +33,25 @@ def get_shahmatka_from_image(image_path : str , divider_h : int = 10, divider_w 
         else:
             black_index = 1
         for col_index in range(divider_w):
-            if black_index % 2 == 0:
+                y_top = row_index * black_h 
+                y_bottom = (row_index + 1) * black_h
+                x_left = col_index * black_w
+                x_right = (col_index + 1) * black_w
+                center_y = int(np.round((y_top + y_bottom) / 2))
+                center_x = int(np.round((x_left + x_right) / 2))
+                center_radius_x= black_w // 10
+                center_radius_y= black_h // 10
+                if black_index % 2 == 0:
+                    image[
+                        y_top : y_bottom,
+                        x_left : x_right,
+                    ] *= 0
                 image[
-                    row_index * black_h : (row_index + 1) * black_h,
-                    col_index * black_w : (col_index + 1) * black_w
-                ] *= 0
-            black_index += 1
+                    center_y - center_radius_y : center_y + center_radius_y,
+                    center_x - center_radius_x: center_x + center_radius_x,
+                ] = (0,0,255)
+                black_index += 1
+                image = cv2.circle(image, (center_x, center_y), center_radius_x // 2, (160, 10, 45), -1)
         row_starts_with_black = not row_starts_with_black
     return image
 
