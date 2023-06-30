@@ -20,7 +20,7 @@ def get_image_paths(current_dir : str) -> List[str]:
                 image_paths.append(os.path.join(root, file_name))
     return image_paths
 
-def calculate_area_coordinates(image : np.ndarray, divider_h : int, divider_w : int, sub_area_h: int, sub_area_w:int,  row_index : int, col_index : int) -> Tuple[int, int, int, int, int, int, int, int]:
+def calculate_area_coordinates( divider_h : int, divider_w : int, sub_area_h: int, sub_area_w:int,  row_index : int, col_index : int) -> Tuple[int, int, int, int, int, int, int, int]:
                 y_top = row_index * sub_area_h 
                 y_bottom = (row_index + 1) * sub_area_h
                 x_left = col_index * sub_area_w
@@ -31,7 +31,7 @@ def calculate_area_coordinates(image : np.ndarray, divider_h : int, divider_w : 
                 center_radius_y= sub_area_w // 10
 
                 return y_top, y_bottom, x_left, x_right, center_y, center_x, center_radius_x, center_radius_y
-def calculate_image_division(image : np.ndarray, h: int, w: int, divider_h : int = 10, divider_w : int = 6) -> Tuple[int, int]:
+def calculate_image_division(h: int, w: int, divider_h : int = 10, divider_w : int = 6) -> Tuple[int, int]:
     sub_area_h = int(np.round(h / divider_h))
     sub_area_w = int(np.round(w / divider_w))
     return sub_area_h, sub_area_w
@@ -40,15 +40,19 @@ def create_cut_subimages(image_path: str, image_name: str, out_path: str, divide
     image = cv2.imread(image_path, 1)
     name_without_extention, extention = os.path.splitext(image_name)
     h, w, c = image.shape
-    sub_area_h, sub_area_w = calculate_image_division(image, h, w, divider_h, divider_w)
+    sub_area_h, sub_area_w = calculate_image_division( h, w, divider_h, divider_w)
     for row_index in range(divider_h):
         for col_index in range(divider_w):
-                y_top, y_bottom, x_left, x_right, center_y, center_x, center_radius_x, center_radius_y = calculate_area_coordinates(image, divider_h, divider_w, sub_area_h, sub_area_w, row_index, col_index)
+                y_top, y_bottom, x_left, x_right, center_y, center_x, center_radius_x, center_radius_y = calculate_area_coordinates( divider_h, divider_w, sub_area_h, sub_area_w, row_index, col_index)
+                x1 = x_left
+                y1 = y_top
+                x2 = x_right
+                y2 = y_bottom
                 sub_image = image[
-                     y_top : y_bottom,
-                     x_left : x_right,
+                     y1 : y2,
+                     x1 : x2,
                 ]
-                out_name = f"{name_without_extention}.{x_left}.{y_top}.{x_right}.{y_bottom}{extention}"
+                out_name = f"{name_without_extention}.{x1}.{y1}.{x2}.{y2}{extention}"
                 print(f"Saving {out_name}")
                 cv2.imwrite(os.path.join(out_path, out_name), sub_image)
 
