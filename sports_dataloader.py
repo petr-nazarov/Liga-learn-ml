@@ -73,9 +73,9 @@ def run_dataset(dataset_path:str , outdir: str):
                     # y1 - 2px
                     cv_bbox[1]-5), 
                 fontFace = cv2.FONT_HERSHEY_SIMPLEX, 
-                fontScale = 1, 
+                fontScale = 0.5, 
                 color = color, 
-                thickness = 2, 
+                thickness = 1, 
                 lineType = cv2.LINE_AA)
             cv2.rectangle(
                     img2draw, 
@@ -85,6 +85,19 @@ def run_dataset(dataset_path:str , outdir: str):
                     pt2=(cv_bbox[2], cv_bbox[3]),
                     color=color,
                     thickness=2)
+            # dot in the middle of bbox
+            cv2.circle(
+                    img2draw, 
+                    # center
+                    center=(
+
+                        cv_bbox[0] + int( (cv_bbox[2] - cv_bbox[0]) /2), 
+                        cv_bbox[1] + int( (cv_bbox[3] - cv_bbox[1]) /2)
+                        ), 
+                    radius=2, 
+                    color=color, 
+                    thickness=2)
+
 
         os.makedirs(outdir, exist_ok=True)
         img_out_path = os.path.join(outdir, os.path.basename(img_path))
