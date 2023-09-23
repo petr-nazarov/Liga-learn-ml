@@ -8,9 +8,9 @@ from typing import List, Dict, Tuple
 def create_random_color(existing_colors : List[Tuple[int]]) -> Tuple[int, int, int]: 
     # color in rgb format
     new_color = (
-            int(np.random.randint(0, 256)),
-            int(np.random.randint(0, 256)),
-            int(np.random.randint(0, 256)),
+            int(np.random.randint(0, 255)),
+            int(np.random.randint(0, 255)),
+            int(np.random.randint(0, 255)),
         )
     if new_color in existing_colors: 
         return create_random_color(existing_colors)
