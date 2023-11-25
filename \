@@ -1,0 +1,31 @@
+import os
+import torch
+from torch import nn
+from torch.functional import Tensor
+import numpy as np
+import cv2
+from varname.helpers import debug
+
+class Simple2DConv (nn.Module):
+    def __init__(
+            self,
+            ):
+        # batch norm 
+        self.bn = nn.BatchNorm2d(
+                num_features=3
+                )
+        # svertka
+        self.conv = nn.Conv2d(
+                in_channels=3,
+                out_channels=64,
+                kernel_size=(3, 3),
+                )
+        # aktivatsiya
+        self.activation = nn.ReLU()
+
+    def forward(self, x: Tensor): 
+        x = self.conv.forward(x)
+        x = self.bn.forward(x)
+        x = self.activation.forward(x)
+
+
