@@ -1,0 +1,10 @@
+matplotlib==3.5.3
+numpy
+scikit-learn==1.0.2
+tifffile==2021.11.2
+joblib==1.2.0
+varname==0.8.1
+PyPika==0.48.9
+albumentations
+pyyaml
+
